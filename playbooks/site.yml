@@ -1,0 +1,11 @@
+---
+- name: Base entrypoint playbook
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Display execution context
+      ansible.builtin.debug:
+        msg:
+          - "Environment: {{ env | default('undefined') }}"
+          - "Host: {{ inventory_hostname }}"
