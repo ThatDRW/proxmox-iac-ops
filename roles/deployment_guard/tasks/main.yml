@@ -1,0 +1,39 @@
+---
+- name: Validate environment variable presence
+  ansible.builtin.assert:
+    that:
+      - env is defined
+    fail_msg: >
+      Environment variable 'env' must be defined
+      (dev | staging | prod).
+  when: require_environment
+
+# ------------------------------------------------
+
+- name: Validate allowed environment value
+  ansible.builtin.assert:
+    that:
+      - env in ['dev', 'staging', 'prod']
+    fail_msg: >
+      Invalid environment '{{ env }}'.
+      Allowed values: dev, staging, prod.
+
+# ------------------------------------------------
+
+- name: Block production execution without override
+  ansible.builtin.assert:
+    that:
+      - allow_prod_changes | bool
+    fail_msg: >
+      Production execution blocked.
+      Set allow_prod_changes=true to continue.
+  when: env == "prod"
+
+# ------------------------------------------------
+
+- name: Display deployment context
+  ansible.builtin.debug:
+    msg:
+      - "Deployment guard passed"
+      - "Environment: {{ env }}"
+      - "Production override: {{ allow_prod_changes }}"

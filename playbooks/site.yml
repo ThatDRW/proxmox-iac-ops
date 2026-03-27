@@ -3,6 +3,11 @@
   hosts: all
   gather_facts: true
 
+  pre_tasks:
+    - name: Run deployment guard
+      ansible.builtin.include_role:
+        name: deployment_guard
+
   tasks:
     - name: Display execution context
       ansible.builtin.debug:

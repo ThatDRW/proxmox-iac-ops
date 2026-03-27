@@ -1,0 +1,5 @@
+---
+env: dev
+
+allow_prod_changes: false
+require_environment: true
