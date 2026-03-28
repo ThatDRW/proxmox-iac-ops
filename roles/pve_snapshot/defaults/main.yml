@@ -1,6 +1,24 @@
 ---
 snapshot_enabled: true
 
-snapshot_name: "pre_{{ snapshot_operation | default('operation') }}_{{ ansible_date_time.iso8601 }}"
+# Naming — incorporates env, host, operation, and timestamp for uniqueness
+# and traceability. Format: pre_<env>_<host>_<operation>_<timestamp>
+snapshot_name: >-
+  pre_{{ env | default('unknown') }}_{{ inventory_hostname }}_{{ snapshot_operation | default('operation') }}_{{ ansible_date_time.epoch }}
 
-snapshot_description: "Automated pre-change snapshot"
+snapshot_operation: operation
+
+# Metadata written to the snapshot description field in Proxmox
+snapshot_metadata:
+  env: "{{ env | default('unknown') }}"
+  host: "{{ inventory_hostname }}"
+  operation: "{{ snapshot_operation | default('operation') }}"
+  timestamp: "{{ ansible_date_time.iso8601 }}"
+  triggered_by: "ansible"
+
+snapshot_description: >-
+  env={{ snapshot_metadata.env }}
+  host={{ snapshot_metadata.host }}
+  operation={{ snapshot_metadata.operation }}
+  timestamp={{ snapshot_metadata.timestamp }}
+  triggered_by={{ snapshot_metadata.triggered_by }}

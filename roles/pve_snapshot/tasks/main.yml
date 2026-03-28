@@ -1,7 +1,7 @@
 ---
 - name: Skip snapshot if disabled
   ansible.builtin.debug:
-    msg: "Snapshots disabled"
+    msg: "Snapshots disabled — skipping for {{ inventory_hostname }}"
   when: not snapshot_enabled
   tags: snapshot
 
