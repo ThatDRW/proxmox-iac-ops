@@ -34,6 +34,11 @@
           include_role:
             name: os_base
 
+        - name: OS Hardening (Stage 1)
+          include_role:
+            name: os_hardening
+          tags: [ hardening ]
+
         - name: Run verification framework
           include_role:
             name: verify_common

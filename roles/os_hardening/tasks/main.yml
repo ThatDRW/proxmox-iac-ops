@@ -1,0 +1,12 @@
+---
+- name: Skip hardening if disabled
+  ansible.builtin.meta: end_play
+  when: not os_hardening_enabled
+
+- name: Include Debian hardening
+  ansible.builtin.include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+
+- name: Include Alpine hardening
+  ansible.builtin.include_tasks: alpine.yml
+  when: ansible_os_family == "Alpine"

@@ -1,0 +1,13 @@
+---
+# Enable hardening
+os_hardening_enabled: true
+
+# SSH hardening
+ssh_permit_root_login: "prohibit-password"
+ssh_password_authentication: false
+
+# Firewall
+os_firewall_enabled: true
+
+# Updates
+os_auto_updates_enabled: true

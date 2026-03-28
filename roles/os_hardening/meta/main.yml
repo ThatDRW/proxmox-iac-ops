@@ -1,0 +1,8 @@
+---
+galaxy_info:
+  author: proxmox-iac-ops
+  description: Base operating system hardening (Stage 1)
+  license: MIT
+  min_ansible_version: "2.15"
+
+dependencies: []
