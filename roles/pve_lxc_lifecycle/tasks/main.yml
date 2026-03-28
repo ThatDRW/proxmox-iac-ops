@@ -1,0 +1,16 @@
+---
+- name: Create LXC
+  ansible.builtin.include_tasks: create.yml
+  when: lxc_action == "create"
+
+- name: Start LXC
+  ansible.builtin.include_tasks: start.yml
+  when: lxc_action == "start"
+
+- name: Stop LXC
+  ansible.builtin.include_tasks: stop.yml
+  when: lxc_action == "stop"
+
+- name: Delete LXC
+  ansible.builtin.include_tasks: delete.yml
+  when: lxc_action == "delete"

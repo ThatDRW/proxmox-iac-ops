@@ -1,0 +1,11 @@
+---
+- name: Start LXC container
+  community.general.proxmox:
+    api_host: "{{ pve_api_host }}"
+    api_user: "{{ pve_api_user }}"
+    api_token_id: "{{ pve_api_token_id }}"
+    api_token_secret: "{{ pve_api_token_secret }}"
+    node: "{{ pve_node }}"
+    vmid: "{{ pve_lxc_id }}"
+    state: started
+  delegate_to: localhost
