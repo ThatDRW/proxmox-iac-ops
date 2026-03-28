@@ -1,0 +1,7 @@
+---
+vm_state: present
+vm_action: create
+
+vm_start_after_create: true
+
+vm_timeout: 300

@@ -1,0 +1,16 @@
+---
+- name: Create VM
+  ansible.builtin.include_tasks: create.yml
+  when: vm_action == "create"
+
+- name: Start VM
+  ansible.builtin.include_tasks: start.yml
+  when: vm_action == "start"
+
+- name: Stop VM
+  ansible.builtin.include_tasks: stop.yml
+  when: vm_action == "stop"
+
+- name: Delete VM
+  ansible.builtin.include_tasks: delete.yml
+  when: vm_action == "delete"
