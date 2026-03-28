@@ -1,0 +1,5 @@
+---
+verify_ssh_port: 22
+verify_ssh_timeout: 10
+verify_ssh_retries: 3
+verify_ssh_delay: 5

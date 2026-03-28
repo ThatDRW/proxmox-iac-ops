@@ -1,4 +1,4 @@
 ---
 verification_enabled: true
 
-verification_roles: []
+verification_roles: [ verify_ssh ]

@@ -1,0 +1,41 @@
+---
+- name: Verify SSH port is reachable
+  ansible.builtin.wait_for:
+    host: "{{ ansible_host }}"
+    port: "{{ verify_ssh_port }}"
+    timeout: "{{ verify_ssh_timeout }}"
+    state: started
+    msg: "SSH port {{ verify_ssh_port }} is not reachable on {{ ansible_host }}"
+  delegate_to: localhost
+  retries: "{{ verify_ssh_retries }}"
+  delay: "{{ verify_ssh_delay }}"
+  register: verify_ssh_port_result
+
+- name: Retrieve SSH banner
+  ansible.builtin.command:
+    cmd: >
+      ssh-keyscan -p {{ verify_ssh_port }}
+      -T {{ verify_ssh_timeout }}
+      {{ ansible_host }}
+  delegate_to: localhost
+  register: verify_ssh_banner_result
+  changed_when: false
+  failed_when: verify_ssh_banner_result.stdout | length == 0
+
+- name: Assert SSH banner contains protocol identifier
+  ansible.builtin.assert:
+    that:
+      - "'SSH-' in verify_ssh_banner_result.stdout"
+    fail_msg: >
+      SSH banner on {{ ansible_host }}:{{ verify_ssh_port }}
+      did not contain a valid SSH protocol identifier.
+    success_msg: >
+      SSH banner verified on {{ ansible_host }}:{{ verify_ssh_port }}
+
+- name: Report SSH verification result
+  ansible.builtin.debug:
+    msg:
+      - "Host: {{ ansible_host }}"
+      - "Port: {{ verify_ssh_port }}"
+      - "Status: reachable"
+      - "Banner: {{ verify_ssh_banner_result.stdout_lines[0] | default('n/a') }}"
