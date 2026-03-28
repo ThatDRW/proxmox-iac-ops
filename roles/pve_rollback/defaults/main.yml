@@ -1,0 +1,3 @@
+---
+auto_rollback: true
+rollback_snapshot: "{{ snapshot_name | default(omit) }}"

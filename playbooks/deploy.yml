@@ -6,29 +6,48 @@
   pre_tasks:
 
     - name: Run deployment guard
-      ansible.builtin.include_role:
+      include_role:
         name: deployment_guard
 
     - name: Create pre-deployment snapshot
-      ansible.builtin.include_role:
+      include_role:
         name: pve_snapshot
       vars:
         snapshot_operation: deploy
 
   tasks:
 
-    - name: Execute VM lifecycle
-      ansible.builtin.include_role:
-        name: pve_vm_lifecycle
-      when: "'pve_vms' in group_names"
+    - name: Execute deployment with rollback protection
+      block:
 
-    - name: Execute LXC lifecycle
-      ansible.builtin.include_role:
-        name: pve_lxc_lifecycle
-      when: "'pve_lxc' in group_names"
+        - name: Execute VM lifecycle
+          include_role:
+            name: pve_vm_lifecycle
+          when: "'pve_vms' in group_names"
+
+        - name: Execute LXC lifecycle
+          include_role:
+            name: pve_lxc_lifecycle
+          when: "'pve_lxc' in group_names"
+
+      rescue:
+
+        - name: Deployment failed — starting rollback
+          ansible.builtin.debug:
+            msg: "Failure detected. Initiating rollback."
+
+        - name: Run rollback role
+          include_role:
+            name: pve_rollback
+          vars:
+            rollback_snapshot: "{{ snapshot_name }}"
+
+        - name: Fail deployment after rollback
+          ansible.builtin.fail:
+            msg: "Deployment failed and rollback executed."
 
   post_tasks:
 
-    - name: Deployment completed
+    - name: Deployment completed successfully
       ansible.builtin.debug:
         msg: "Deployment workflow finished successfully"

@@ -1,0 +1,12 @@
+---
+- name: Rollback VM from snapshot
+  community.general.proxmox_kvm:
+    api_host: "{{ pve_api_host }}"
+    api_user: "{{ pve_api_user }}"
+    api_token_id: "{{ pve_api_token_id }}"
+    api_token_secret: "{{ pve_api_token_secret }}"
+    node: "{{ pve_node }}"
+    vmid: "{{ pve_vm_id }}"
+    state: rollback
+    snapshot: "{{ rollback_snapshot }}"
+  delegate_to: localhost
