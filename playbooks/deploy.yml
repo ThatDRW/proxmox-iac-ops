@@ -30,6 +30,10 @@
             name: pve_lxc_lifecycle
           when: "'pve_lxc' in group_names"
 
+        - name: Apply base OS configuration
+          include_role:
+            name: os_base
+
         - name: Run verification framework
           include_role:
             name: verify_common

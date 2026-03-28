@@ -1,0 +1,15 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  when: os_base_update_packages
+
+- name: Upgrade packages
+  ansible.builtin.apt:
+    upgrade: dist
+  when: os_base_update_packages
+
+- name: Install common packages (Debian)
+  ansible.builtin.apt:
+    name: "{{ os_base_common_packages + os_base_debian_packages }}"
+    state: present

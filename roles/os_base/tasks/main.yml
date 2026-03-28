@@ -1,0 +1,14 @@
+---
+- name: Detect supported OS
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ["Debian", "Alpine"]
+    fail_msg: "Unsupported operating system"
+
+- name: Configure Debian systems
+  ansible.builtin.include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+
+- name: Configure Alpine systems
+  ansible.builtin.include_tasks: alpine.yml
+  when: ansible_os_family == "Alpine"

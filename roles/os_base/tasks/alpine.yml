@@ -1,0 +1,15 @@
+---
+- name: Update apk cache
+  ansible.builtin.apk:
+    update_cache: yes
+  when: os_base_update_packages
+
+- name: Upgrade packages
+  ansible.builtin.apk:
+    upgrade: yes
+  when: os_base_update_packages
+
+- name: Install common packages (Alpine)
+  ansible.builtin.apk:
+    name: "{{ os_base_common_packages + os_base_alpine_packages }}"
+    state: present
