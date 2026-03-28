@@ -1,0 +1,51 @@
+---
+- name: Resolve default gateway from facts
+  ansible.builtin.set_fact:
+    verify_network_gateway: "{{ ansible_default_ipv4.gateway }}"
+  failed_when: ansible_default_ipv4.gateway is not defined
+
+- name: Verify default gateway is reachable
+  ansible.builtin.command:
+    cmd: >
+      ping -c {{ verify_network_gateway_ping_count }}
+      -W {{ verify_network_gateway_ping_timeout }}
+      {{ verify_network_gateway }}
+  register: verify_gateway_result
+  changed_when: false
+  failed_when: verify_gateway_result.rc != 0
+
+- name: Report gateway reachability
+  ansible.builtin.debug:
+    msg: "Gateway {{ verify_network_gateway }} is reachable"
+
+- name: Verify DNS resolution
+  ansible.builtin.command:
+    cmd: "getent hosts {{ verify_network_dns_hostname }}"
+  register: verify_dns_result
+  changed_when: false
+  failed_when: verify_dns_result.rc != 0
+  timeout: "{{ verify_network_dns_timeout }}"
+
+- name: Report DNS resolution result
+  ansible.builtin.debug:
+    msg: "DNS resolution verified: {{ verify_network_dns_hostname }} -> {{ verify_dns_result.stdout.split() | first }}"
+
+- name: Verify external host reachability
+  ansible.builtin.wait_for:
+    host: "{{ item.host }}"
+    port: "{{ item.port }}"
+    timeout: "{{ item.timeout | default(5) }}"
+    state: started
+    msg: "External host {{ item.host }}:{{ item.port }} is not reachable"
+  loop: "{{ verify_network_external_hosts }}"
+  loop_control:
+    label: "{{ item.host }}:{{ item.port }}"
+  when: verify_network_external_hosts | length > 0
+
+- name: Report external reachability results
+  ansible.builtin.debug:
+    msg: "External host reachable: {{ item.host }}:{{ item.port }}"
+  loop: "{{ verify_network_external_hosts }}"
+  loop_control:
+    label: "{{ item.host }}:{{ item.port }}"
+  when: verify_network_external_hosts | length > 0

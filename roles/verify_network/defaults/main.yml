@@ -1,0 +1,14 @@
+---
+# Gateway reachability
+verify_network_gateway_ping_count: 3
+verify_network_gateway_ping_timeout: 5
+
+# DNS resolution
+verify_network_dns_hostname: "one.one.one.one"
+verify_network_dns_timeout: 5
+
+# External host reachability
+verify_network_external_hosts:
+  - host: "1.1.1.1"
+    port: 443
+    timeout: 5
