@@ -1,0 +1,17 @@
+---
+- name: Check systemd service is active
+  ansible.builtin.command:
+    cmd: "systemctl is-active {{ item.name }}"
+  register: _verify_systemd_result
+  changed_when: false
+  failed_when: _verify_systemd_result.rc != 0
+  loop: "{{ _verify_service_targets }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Report systemd service states
+  ansible.builtin.debug:
+    msg: "{{ item.item.name }}: {{ item.stdout }}"
+  loop: "{{ _verify_systemd_result.results }}"
+  loop_control:
+    label: "{{ item.item.name }}"
