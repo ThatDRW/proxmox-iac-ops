@@ -39,6 +39,10 @@
             name: os_hardening
           tags: [ hardening ]
 
+        - name: Configure services
+          include_role:
+            name: service_common
+
         - name: Run verification framework
           include_role:
             name: verify_common

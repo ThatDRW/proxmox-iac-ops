@@ -1,0 +1,8 @@
+---
+- name: Install services
+  ansible.builtin.include_tasks: install.yml
+  when: services | length > 0
+
+- name: Manage services
+  ansible.builtin.include_tasks: manage.yml
+  when: services | length > 0

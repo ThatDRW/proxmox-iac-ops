@@ -1,0 +1,8 @@
+---
+- name: Install service packages
+  ansible.builtin.package:
+    name: "{{ item.package }}"
+    state: present
+  loop: "{{ services }}"
+  loop_control:
+    label: "{{ item.name }}"
