@@ -239,3 +239,18 @@ Most IaC examples show scripts.
 This repository demonstrates a platform.
 
 The goal is to build something indistinguishable from a real internal infrastructure automation framework used in production environments.
+
+
+
+## 🚀 Deployment
+Example deployment execution:
+
+```bash
+ansible-playbook playbooks/deploy.yml
+```
+
+Deployment workflow:
+- Deployment guard validation
+- Pre-change snapshot creation
+- VM/LXC lifecycle execution
+- Verification (future phase)

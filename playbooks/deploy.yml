@@ -1,0 +1,34 @@
+---
+- name: Proxmox deployment workflow
+  hosts: pve_all
+  gather_facts: true
+
+  pre_tasks:
+
+    - name: Run deployment guard
+      ansible.builtin.include_role:
+        name: deployment_guard
+
+    - name: Create pre-deployment snapshot
+      ansible.builtin.include_role:
+        name: pve_snapshot
+      vars:
+        snapshot_operation: deploy
+
+  tasks:
+
+    - name: Execute VM lifecycle
+      ansible.builtin.include_role:
+        name: pve_vm_lifecycle
+      when: "'pve_vms' in group_names"
+
+    - name: Execute LXC lifecycle
+      ansible.builtin.include_role:
+        name: pve_lxc_lifecycle
+      when: "'pve_lxc' in group_names"
+
+  post_tasks:
+
+    - name: Deployment completed
+      ansible.builtin.debug:
+        msg: "Deployment workflow finished successfully"
