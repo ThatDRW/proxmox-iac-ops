@@ -1,0 +1,9 @@
+---
+- name: Skip verification when disabled
+  ansible.builtin.debug:
+    msg: "Verification disabled"
+  when: not verification_enabled
+
+- name: Run verification dispatcher
+  ansible.builtin.include_tasks: dispatcher.yml
+  when: verification_enabled
