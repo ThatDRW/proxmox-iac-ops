@@ -1,0 +1,6 @@
+---
+snapshot_enabled: true
+
+snapshot_name: "pre_{{ snapshot_operation | default('operation') }}_{{ ansible_date_time.iso8601 }}"
+
+snapshot_description: "Automated pre-change snapshot"
