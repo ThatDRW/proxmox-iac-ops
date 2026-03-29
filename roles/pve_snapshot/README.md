@@ -3,7 +3,7 @@ Creates pre-change snapshots for Proxmox virtual machines and LXC containers.
 
 Snapshots are taken before risky operations and serve as the restore point
 for the `pve_rollback` role. The snapshot name is stored as a host fact
-(`last_snapshot_name`) so it can be referenced by the rescue block in
+(`pve_snapshot_last_name`) so it can be referenced by the rescue block in
 `deploy.yml` without requiring manual coordination.
 
 
@@ -35,20 +35,20 @@ needing to cross-reference Ansible logs.
 
 
 ## Variables
-| Variable                | Default                                      | Description                                        |
-|-------------------------|----------------------------------------------|----------------------------------------------------|
-| `snapshot_enabled`      | `true`                                       | Toggle snapshot creation                           |
-| `snapshot_operation`    | `operation`                                  | Logical operation label (e.g. `deploy`, `update`)  |
-| `snapshot_name`         | `pre_<env>_<host>_<operation>_<epoch>`       | Generated snapshot identifier                      |
-| `snapshot_metadata`     | see defaults                                 | Dict of values written to snapshot description     |
-| `snapshot_description`  | rendered from `snapshot_metadata`            | String written to Proxmox snapshot description     |
+| Variable                    | Default                                      | Description                                        |
+|-----------------------------|----------------------------------------------|----------------------------------------------------|
+| `pve_snapshot_enabled`      | `true`                                       | Toggle snapshot creation                           |
+| `pve_snapshot_operation`    | `operation`                                  | Logical operation label (e.g. `deploy`, `update`)  |
+| `pve_snapshot_name`         | `pre_<env>_<host>_<operation>_<epoch>`       | Generated snapshot identifier                      |
+| `pve_snapshot_metadata`     | see defaults                                 | Dict of values written to snapshot description     |
+| `pve_snapshot_description`  | rendered from `pve_snapshot_metadata`        | String written to Proxmox snapshot description     |
 
 
 
 ## Outputs
-| Fact                 | Description                                          |
-|----------------------|------------------------------------------------------|
-| `last_snapshot_name` | The name of the snapshot just created — used by `pve_rollback` |
+| Fact                      | Description                                              |
+|---------------------------|----------------------------------------------------------|
+| `pve_snapshot_last_name`  | The name of the snapshot just created — used by `pve_rollback` |
 
 
 
@@ -57,7 +57,7 @@ needing to cross-reference Ansible logs.
 - ansible.builtin.include_role:
     name: pve_snapshot
   vars:
-    snapshot_operation: deploy
+    pve_snapshot_operation: deploy
 ```
 
 

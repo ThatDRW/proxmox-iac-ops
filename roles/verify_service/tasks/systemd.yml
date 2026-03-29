@@ -1,17 +1,18 @@
 ---
 - name: Check systemd service is active
-  ansible.builtin.command:
-    cmd: "systemctl is-active {{ item.name }}"
-  register: _verify_systemd_result
-  changed_when: false
-  failed_when: _verify_systemd_result.rc != 0
+  ansible.builtin.systemd:
+    name: "{{ item.name }}"
+  register: verify_service_systemd_result
   loop: "{{ _verify_service_targets }}"
   loop_control:
     label: "{{ item.name }}"
 
-- name: Report systemd service states
-  ansible.builtin.debug:
-    msg: "{{ item.item.name }}: {{ item.stdout }}"
-  loop: "{{ _verify_systemd_result.results }}"
+- name: Assert services are active
+  ansible.builtin.assert:
+    that:
+      - item.status.ActiveState == "active"
+    fail_msg: "Service {{ item.item.name }} is not active (state: {{ item.status.ActiveState }})"
+    success_msg: "Service {{ item.item.name }} is active"
+  loop: "{{ verify_service_systemd_result.results }}"
   loop_control:
     label: "{{ item.item.name }}"

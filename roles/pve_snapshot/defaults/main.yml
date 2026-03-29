@@ -1,24 +1,24 @@
 ---
-snapshot_enabled: true
+pve_snapshot_enabled: true
 
-# Naming — incorporates env, host, operation, and timestamp for uniqueness
-# and traceability. Format: pre_<env>_<host>_<operation>_<timestamp>
-snapshot_name: >-
-  pre_{{ env | default('unknown') }}_{{ inventory_hostname }}_{{ snapshot_operation | default('operation') }}_{{ ansible_date_time.epoch }}
+# Naming incorporates env, host, operation and epoch for uniqueness
+# and traceability. Format: pre_<env>_<host>_<operation>_<epoch>
+pve_snapshot_name: >-
+  pre_{{ env | default('unknown') }}_{{ inventory_hostname }}_{{ pve_snapshot_operation | default('operation') }}_{{ ansible_date_time.epoch }}
 
-snapshot_operation: operation
+pve_snapshot_operation: operation
 
 # Metadata written to the snapshot description field in Proxmox
-snapshot_metadata:
+pve_snapshot_metadata:
   env: "{{ env | default('unknown') }}"
   host: "{{ inventory_hostname }}"
-  operation: "{{ snapshot_operation | default('operation') }}"
+  operation: "{{ pve_snapshot_operation | default('operation') }}"
   timestamp: "{{ ansible_date_time.iso8601 }}"
   triggered_by: "ansible"
 
-snapshot_description: >-
-  env={{ snapshot_metadata.env }}
-  host={{ snapshot_metadata.host }}
-  operation={{ snapshot_metadata.operation }}
-  timestamp={{ snapshot_metadata.timestamp }}
-  triggered_by={{ snapshot_metadata.triggered_by }}
+pve_snapshot_description: >-
+  env={{ pve_snapshot_metadata.env }}
+  host={{ pve_snapshot_metadata.host }}
+  operation={{ pve_snapshot_metadata.operation }}
+  timestamp={{ pve_snapshot_metadata.timestamp }}
+  triggered_by={{ pve_snapshot_metadata.triggered_by }}

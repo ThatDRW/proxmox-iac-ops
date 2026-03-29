@@ -4,7 +4,7 @@ Manages lifecycle operations for Proxmox virtual machines.
 
 
 ## Supported Actions
-vm_action:
+pve_vm_lifecycle_action:
 - create
 - start
 - stop
@@ -28,7 +28,7 @@ pve_vm_id
 - include_role:
     name: pve_vm_lifecycle
   vars:
-    vm_action: create
+    pve_vm_lifecycle_action: create
 ```
 This role manages hypervisor lifecycle only.
 Guest configuration is handled separately.

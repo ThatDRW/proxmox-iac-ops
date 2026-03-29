@@ -1,4 +1,4 @@
 ---
 # Override list of services to verify.
-# When empty, falls back to the `services` variable from service_common.
-verify_services: []
+# When empty, falls back to service_common_services.
+verify_service_targets: []

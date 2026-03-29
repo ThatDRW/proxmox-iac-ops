@@ -2,6 +2,6 @@
 - name: Execute verification roles
   ansible.builtin.include_role:
     name: "{{ item }}"
-  loop: "{{ verification_roles }}"
+  loop: "{{ verify_common_roles }}"
   loop_control:
     label: "{{ item }}"

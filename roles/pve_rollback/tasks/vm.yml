@@ -8,5 +8,5 @@
     node: "{{ pve_node }}"
     vmid: "{{ pve_vm_id }}"
     state: rollback
-    snapshot: "{{ rollback_snapshot }}"
+    snapshot: "{{ pve_rollback_snapshot }}"
   delegate_to: localhost

@@ -1,7 +1,10 @@
 ---
-vm_state: present
-vm_action: create
+pve_vm_lifecycle_action: create
+pve_vm_lifecycle_state: present
+pve_vm_lifecycle_start_after_create: true
+pve_vm_lifecycle_timeout: "{{ pve_operation_timeout | default(300) }}"
 
-vm_start_after_create: true
-
-vm_timeout: 300
+# Resource defaults — override per host in host_vars
+pve_vm_lifecycle_memory: 2048
+pve_vm_lifecycle_cores: 2
+pve_vm_lifecycle_bridge: vmbr0

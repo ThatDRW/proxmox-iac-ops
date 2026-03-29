@@ -3,6 +3,6 @@
   ansible.builtin.package:
     name: "{{ item.package }}"
     state: present
-  loop: "{{ services }}"
+  loop: "{{ service_common_services }}"
   loop_control:
     label: "{{ item.name }}"

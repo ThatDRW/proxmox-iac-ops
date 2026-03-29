@@ -12,9 +12,9 @@ Verification determines deployment success and may trigger rollback.
 
 ## Variables
 ```
-verification_enabled: true
+verify_common_enabled: true
 
-verification_roles:
+verify_common_roles:
 List of verification roles to execute.
 ```
 
@@ -22,7 +22,7 @@ List of verification roles to execute.
 
 ## Example
 ```yaml
-verification_roles:
+verify_common_roles:
   - verify_ssh
   - verify_network
 ```

@@ -8,13 +8,13 @@
     node: "{{ pve_node }}"
     vmid: "{{ pve_vm_id }}"
     name: "{{ inventory_hostname }}"
-    memory: "{{ vm_memory | default(2048) }}"
-    cores: "{{ vm_cores | default(2) }}"
+    memory: "{{ pve_vm_lifecycle_memory }}"
+    cores: "{{ pve_vm_lifecycle_cores }}"
     net:
-      net0: virtio,bridge={{ vm_bridge | default('vmbr0') }}
+      net0: "virtio,bridge={{ pve_vm_lifecycle_bridge }}"
     state: present
   delegate_to: localhost
 
 - name: Start VM after creation
   ansible.builtin.include_tasks: start.yml
-  when: vm_start_after_create
+  when: pve_vm_lifecycle_start_after_create

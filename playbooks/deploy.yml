@@ -14,7 +14,7 @@
       ansible.builtin.include_role:
         name: pve_snapshot
       vars:
-        snapshot_operation: deploy
+        pve_snapshot_operation: deploy
       tags: snapshot
 
   tasks:
@@ -65,7 +65,7 @@
           ansible.builtin.include_role:
             name: pve_rollback
           vars:
-            rollback_snapshot: "{{ last_snapshot_name | default(snapshot_name) }}"
+            pve_rollback_snapshot: "{{ pve_snapshot_last_name | default(pve_snapshot_name) }}"
           tags: rollback
 
         - name: Fail deployment after rollback

@@ -20,22 +20,22 @@ allow_prod_changes: false
 
 # Snapshots: enabled in all environments. Consider disabling only in dev
 # if snapshot storage is scarce.
-snapshot_enabled: true
+pve_snapshot_enabled: true
 
 # Automatic rollback on failure. Recommended true in staging and prod.
 # May be set to false in dev for faster iteration.
-auto_rollback: true
+pve_rollback_auto: true
 
 # ---------------------------------------------------------------------------
 # Verification
 # ---------------------------------------------------------------------------
 
 # Run verification framework after deployment.
-verification_enabled: true
+verify_common_enabled: true
 
 # Base verification roles applied to all hosts.
 # Extend in group_vars/pve_all.yml or host_vars for service-specific checks.
-verification_roles:
+verify_common_roles:
   - verify_ssh
   - verify_network
 

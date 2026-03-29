@@ -1,4 +1,3 @@
 ---
-verification_enabled: true
-
-verification_roles: [verify_ssh, verify_network, verify_service]
+verify_common_enabled: true # noqa: var-naming[no-role-prefix]
+verify_common_roles: [] # noqa: var-naming[no-role-prefix]

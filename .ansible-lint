@@ -1,3 +1,6 @@
+---
 skip_list:
-  - fqcn-builtins
   - yaml[line-length]
+
+warn_list:
+  - jinja[spacing]

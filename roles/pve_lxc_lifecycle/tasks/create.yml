@@ -8,13 +8,13 @@
     node: "{{ pve_node }}"
     vmid: "{{ pve_lxc_id }}"
     hostname: "{{ inventory_hostname }}"
-    ostemplate: "{{ lxc_template }}"
-    memory: "{{ lxc_memory }}"
-    cores: "{{ lxc_cores }}"
-    rootfs: "{{ lxc_rootfs }}"
+    ostemplate: "{{ pve_lxc_lifecycle_template }}"
+    memory: "{{ pve_lxc_lifecycle_memory }}"
+    cores: "{{ pve_lxc_lifecycle_cores }}"
+    rootfs: "{{ pve_lxc_lifecycle_rootfs }}"
     state: present
   delegate_to: localhost
 
 - name: Start container after creation
   ansible.builtin.include_tasks: start.yml
-  when: lxc_start_after_create
+  when: pve_lxc_lifecycle_start_after_create

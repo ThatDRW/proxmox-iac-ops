@@ -2,8 +2,8 @@
 - name: Enable and start services
   ansible.builtin.service:
     name: "{{ item.name }}"
-    enabled: "{{ service_enable }}"
-    state: "{{ service_state }}"
-  loop: "{{ services }}"
+    enabled: "{{ service_common_enable }}"
+    state: "{{ service_common_state }}"
+  loop: "{{ service_common_services }}"
   loop_control:
     label: "{{ item.name }}"

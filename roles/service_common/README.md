@@ -10,12 +10,12 @@ Provides a reusable mechanism for managing system services without creating dedi
 
 ## Variables
 ```
-services:
+service_common_services:
 - name: nginx
   package: nginx
 
-service_enable: true
-service_state: started
+service_common_enable: true
+service_common_state: started
 ```
 
 

@@ -14,10 +14,10 @@ making this role safe to run against newly provisioned VMs and LXC containers.
 
 
 ## Usage
-Add this role to the `verification_roles` list in your playbook or group vars:
+Add this role to the `verify_common_roles` list in your playbook or group vars:
 
 ```yaml
-verification_roles:
+verify_common_roles:
   - verify_ssh
 ```
 
@@ -38,7 +38,7 @@ This role integrates with the `verify_common` dispatcher. Register it as part
 of the verification framework to run it automatically during deployments:
 
 ```yaml
-# group_vars/pve_all.yml
-verification_roles:
-  - verify_ssh
+# group_vars/all.yml
+verify_common_roles:
+   - verify_ssh
 ```

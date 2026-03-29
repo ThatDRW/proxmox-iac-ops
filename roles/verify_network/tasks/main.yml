@@ -10,9 +10,9 @@
       ping -c {{ verify_network_gateway_ping_count }}
       -W {{ verify_network_gateway_ping_timeout }}
       {{ verify_network_gateway }}
-  register: verify_gateway_result
+  register: verify_network_gateway_result
   changed_when: false
-  failed_when: verify_gateway_result.rc != 0
+  failed_when: verify_network_gateway_result.rc != 0
 
 - name: Report gateway reachability
   ansible.builtin.debug:
@@ -21,14 +21,14 @@
 - name: Verify DNS resolution
   ansible.builtin.command:
     cmd: "getent hosts {{ verify_network_dns_hostname }}"
-  register: verify_dns_result
+  register: verify_network_dns_result
   changed_when: false
-  failed_when: verify_dns_result.rc != 0
+  failed_when: verify_network_dns_result.rc != 0
   timeout: "{{ verify_network_dns_timeout }}"
 
 - name: Report DNS resolution result
   ansible.builtin.debug:
-    msg: "DNS resolution verified: {{ verify_network_dns_hostname }} -> {{ verify_dns_result.stdout.split() | first }}"
+    msg: "DNS resolution verified: {{ verify_network_dns_hostname }} -> {{ verify_network_dns_result.stdout.split() | first }}"
 
 - name: Verify external host reachability
   ansible.builtin.wait_for:

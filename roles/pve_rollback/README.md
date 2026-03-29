@@ -10,8 +10,8 @@ Provides automatic recovery after failed deployments.
 
 ## Variables
 ```
-auto_rollback: true
-rollback_snapshot: snapshot name
+pve_rollback_auto: true
+pve_rollback_snapshot: snapshot name
 ```
 
 

@@ -1,8 +1,9 @@
 ---
-lxc_action: create
+pve_lxc_lifecycle_action: create
+pve_lxc_lifecycle_start_after_create: true
 
-lxc_start_after_create: true
-
-lxc_memory: 512
-lxc_cores: 1
-lxc_rootfs: "local-lvm:8"
+# Resource defaults — override per host in host_vars
+pve_lxc_lifecycle_memory: 512
+pve_lxc_lifecycle_cores: 1
+pve_lxc_lifecycle_rootfs: "local-lvm:8"
+pve_lxc_lifecycle_template: ""

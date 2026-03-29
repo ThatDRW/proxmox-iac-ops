@@ -1,5 +1,4 @@
 ---
-env: dev
-
-allow_prod_changes: false
-require_environment: true
+env: dev # noqa: var-naming[no-role-prefix]
+allow_prod_changes: false # noqa: var-naming[no-role-prefix]
+require_environment: true # noqa: var-naming[no-role-prefix]

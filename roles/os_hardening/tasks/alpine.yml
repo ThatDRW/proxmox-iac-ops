@@ -15,12 +15,12 @@
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^PermitRootLogin'
-    line: "PermitRootLogin {{ ssh_permit_root_login }}"
-  notify: restart ssh
+    line: "PermitRootLogin {{ os_hardening_ssh_permit_root_login }}"
+  notify: Restart ssh
 
 - name: Disable SSH password authentication
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^PasswordAuthentication'
-    line: "PasswordAuthentication {{ ssh_password_authentication | ternary('yes','no') }}"
-  notify: restart ssh
+    line: "PasswordAuthentication {{ os_hardening_ssh_password_authentication | ternary('yes', 'no') }}"
+  notify: Restart ssh

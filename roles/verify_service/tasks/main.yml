@@ -2,15 +2,15 @@
 - name: Resolve service list
   ansible.builtin.set_fact:
     _verify_service_targets: >-
-      {{ verify_services if verify_services | length > 0 else services | default([]) }}
+      {{ verify_service_targets if verify_service_targets | length > 0 else service_common_services | default([]) }}
 
 - name: Assert service list is not empty
   ansible.builtin.assert:
     that:
       - _verify_service_targets | length > 0
     fail_msg: >
-      No services to verify. Define verify_services or ensure the services
-      variable is populated via service_common.
+      No services to verify. Define verify_service_targets or ensure
+      service_common_services is populated via service_common.
 
 - name: Verify service state on Debian (systemd)
   ansible.builtin.include_tasks: systemd.yml

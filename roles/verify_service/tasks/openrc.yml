@@ -2,9 +2,9 @@
 - name: Check openrc service is active
   ansible.builtin.command:
     cmd: "rc-service {{ item.name }} status"
-  register: _verify_openrc_result
+  register: verify_service_openrc_result
   changed_when: false
-  failed_when: _verify_openrc_result.rc != 0
+  failed_when: verify_service_openrc_result.rc != 0
   loop: "{{ _verify_service_targets }}"
   loop_control:
     label: "{{ item.name }}"
@@ -12,6 +12,6 @@
 - name: Report openrc service states
   ansible.builtin.debug:
     msg: "{{ item.item.name }}: {{ 'started' if item.rc == 0 else 'not running' }}"
-  loop: "{{ _verify_openrc_result.results }}"
+  loop: "{{ verify_service_openrc_result.results }}"
   loop_control:
     label: "{{ item.item.name }}"

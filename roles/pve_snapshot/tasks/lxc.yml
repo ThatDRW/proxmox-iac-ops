@@ -1,7 +1,7 @@
 ---
 - name: Resolve snapshot name
   ansible.builtin.debug:
-    msg: "Creating LXC snapshot: {{ snapshot_name }}"
+    msg: "Creating LXC snapshot: {{ pve_snapshot_name }}"
 
 - name: Create LXC snapshot
   community.general.proxmox:
@@ -12,11 +12,11 @@
     node: "{{ pve_node }}"
     vmid: "{{ pve_lxc_id }}"
     state: snapshot
-    snapname: "{{ snapshot_name }}"
-    description: "{{ snapshot_description }}"
+    snapname: "{{ pve_snapshot_name }}"
+    description: "{{ pve_snapshot_description }}"
   delegate_to: localhost
   register: pve_snapshot_lxc_result
 
 - name: Record snapshot name for rollback reference
   ansible.builtin.set_fact:
-    last_snapshot_name: "{{ snapshot_name }}"
+    pve_snapshot_last_name: "{{ pve_snapshot_name }}"

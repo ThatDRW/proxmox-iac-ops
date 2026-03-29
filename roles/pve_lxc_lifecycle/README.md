@@ -4,7 +4,7 @@ Manages lifecycle operations for Proxmox LXC containers.
 
 
 ## Supported Actions
-lxc_action:
+pve_lxc_lifecycle_action:
 - create
 - start
 - stop
@@ -20,7 +20,7 @@ pve_api_token_id
 pve_api_token_secret
 pve_node
 pve_lxc_id
-lxc_template
+pve_lxc_lifecycle_template
 ```
 
 
@@ -30,7 +30,7 @@ lxc_template
 - include_role:
     name: pve_lxc_lifecycle
   vars:
-    lxc_action: create
+    pve_lxc_lifecycle_action: create
 ```
 Handles hypervisor lifecycle only.
 OS configuration is performed by separate roles.

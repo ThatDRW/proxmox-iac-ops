@@ -1,7 +1,7 @@
 ---
 - name: Resolve snapshot name
   ansible.builtin.debug:
-    msg: "Creating VM snapshot: {{ snapshot_name }}"
+    msg: "Creating VM snapshot: {{ pve_snapshot_name }}"
 
 - name: Create VM snapshot
   community.general.proxmox_kvm:
@@ -12,11 +12,11 @@
     node: "{{ pve_node }}"
     vmid: "{{ pve_vm_id }}"
     state: snapshot
-    snapshot: "{{ snapshot_name }}"
-    description: "{{ snapshot_description }}"
+    snapshot: "{{ pve_snapshot_name }}"
+    description: "{{ pve_snapshot_description }}"
   delegate_to: localhost
   register: pve_snapshot_vm_result
 
 - name: Record snapshot name for rollback reference
   ansible.builtin.set_fact:
-    last_snapshot_name: "{{ snapshot_name }}"
+    pve_snapshot_last_name: "{{ pve_snapshot_name }}"

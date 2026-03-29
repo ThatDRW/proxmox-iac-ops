@@ -5,15 +5,15 @@
 # Default action executed by pve_vm_lifecycle.
 # Override per host in host_vars for targeted operations.
 # Valid values: create | start | stop | delete
-vm_action: create
+pve_vm_lifecycle_action: create
 
 # Automatically start the VM after creation.
-vm_start_after_create: true
+pve_vm_lifecycle_start_after_create: true
 
 # Timeout in seconds for VM API operations.
 # Inherits pve_operation_timeout from group_vars/pve_all.yml by default;
 # override here if VMs require a longer wait (e.g. large disk provisioning).
-vm_timeout: "{{ pve_operation_timeout }}"
+pve_vm_lifecycle_timeout: "{{ pve_operation_timeout }}"
 
 # ---------------------------------------------------------------------------
 # Required — set per host in host_vars
@@ -26,10 +26,10 @@ vm_timeout: "{{ pve_operation_timeout }}"
 # ---------------------------------------------------------------------------
 # Verification
 # ---------------------------------------------------------------------------
-# Extend the base verification_roles from group_vars/all.yml with
+# Extend the base verify_common_roles from group_vars/all.yml with
 # service-specific checks once services are defined in infra-live.
 # Example:
-#   verification_roles:
+#   verify_common_roles:
 #     - verify_ssh
 #     - verify_network
 #     - verify_service
