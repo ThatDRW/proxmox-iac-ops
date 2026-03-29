@@ -2,15 +2,19 @@
 - name: Create LXC
   ansible.builtin.include_tasks: create.yml
   when: lxc_action == "create"
+  tags: lifecycle
 
 - name: Start LXC
   ansible.builtin.include_tasks: start.yml
   when: lxc_action == "start"
+  tags: lifecycle
 
 - name: Stop LXC
   ansible.builtin.include_tasks: stop.yml
   when: lxc_action == "stop"
+  tags: lifecycle
 
 - name: Delete LXC
   ansible.builtin.include_tasks: delete.yml
   when: lxc_action == "delete"
+  tags: lifecycle

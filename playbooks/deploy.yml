@@ -6,14 +6,16 @@
   pre_tasks:
 
     - name: Run deployment guard
-      include_role:
+      ansible.builtin.include_role:
         name: deployment_guard
+      tags: guard
 
     - name: Create pre-deployment snapshot
-      include_role:
+      ansible.builtin.include_role:
         name: pve_snapshot
       vars:
         snapshot_operation: deploy
+      tags: snapshot
 
   tasks:
 
@@ -21,43 +23,50 @@
       block:
 
         - name: Execute VM lifecycle
-          include_role:
+          ansible.builtin.include_role:
             name: pve_vm_lifecycle
           when: "'pve_vms' in group_names"
+          tags: lifecycle
 
         - name: Execute LXC lifecycle
-          include_role:
+          ansible.builtin.include_role:
             name: pve_lxc_lifecycle
           when: "'pve_lxc' in group_names"
+          tags: lifecycle
 
         - name: Apply base OS configuration
-          include_role:
+          ansible.builtin.include_role:
             name: os_base
+          tags: os
 
         - name: OS Hardening (Stage 1)
-          include_role:
+          ansible.builtin.include_role:
             name: os_hardening
-          tags: [ hardening ]
+          tags: hardening
 
         - name: Configure services
-          include_role:
+          ansible.builtin.include_role:
             name: service_common
+          tags: services
 
         - name: Run verification framework
-          include_role:
+          ansible.builtin.include_role:
             name: verify_common
+          tags: verify
 
       rescue:
 
         - name: Deployment failed — starting rollback
           ansible.builtin.debug:
             msg: "Failure detected. Initiating rollback."
+          tags: rollback
 
         - name: Run rollback role
-          include_role:
+          ansible.builtin.include_role:
             name: pve_rollback
           vars:
-            rollback_snapshot: "{{ snapshot_name }}"
+            rollback_snapshot: "{{ last_snapshot_name | default(snapshot_name) }}"
+          tags: rollback
 
         - name: Fail deployment after rollback
           ansible.builtin.fail:

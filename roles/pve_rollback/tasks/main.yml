@@ -3,15 +3,18 @@
   ansible.builtin.debug:
     msg: "Automatic rollback disabled"
   when: not auto_rollback
+  tags: rollback
 
 - name: Rollback virtual machines
   ansible.builtin.include_tasks: vm.yml
   when:
     - auto_rollback
     - "'pve_vms' in group_names"
+  tags: rollback
 
 - name: Rollback LXC containers
   ansible.builtin.include_tasks: lxc.yml
   when:
     - auto_rollback
     - "'pve_lxc' in group_names"
+  tags: rollback
