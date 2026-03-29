@@ -1,0 +1,31 @@
+---
+# ---------------------------------------------------------------------------
+# Proxmox API connection
+# ---------------------------------------------------------------------------
+# These variables must be overridden in infra-live using Ansible Vault.
+# They are defined here as documentation of required variables only.
+# Never set real values in this repository.
+
+pve_api_host: "{{ vault_pve_api_host }}"
+pve_api_user: "{{ vault_pve_api_user }}"
+pve_api_token_id: "{{ vault_pve_api_token_id }}"
+pve_api_token_secret: "{{ vault_pve_api_token_secret }}"
+
+# ---------------------------------------------------------------------------
+# Proxmox node
+# ---------------------------------------------------------------------------
+# Target PVE node name. Override per host or group in infra-live if running
+# a multi-node cluster.
+pve_node: "{{ vault_pve_node }}"
+
+# ---------------------------------------------------------------------------
+# Operation timeouts
+# ---------------------------------------------------------------------------
+# Timeout in seconds for VM/LXC API operations (create, start, stop).
+pve_operation_timeout: 300
+
+# ---------------------------------------------------------------------------
+# Snapshot defaults (Proxmox-scoped)
+# ---------------------------------------------------------------------------
+# Operation label used in snapshot naming when not explicitly set by a playbook.
+snapshot_operation: operation

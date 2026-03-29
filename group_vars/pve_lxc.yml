@@ -1,0 +1,36 @@
+---
+# ---------------------------------------------------------------------------
+# LXC lifecycle defaults
+# ---------------------------------------------------------------------------
+# Default action executed by pve_lxc_lifecycle.
+# Override per host in host_vars for targeted operations.
+# Valid values: create | start | stop | delete
+lxc_action: create
+
+# Automatically start the container after creation.
+lxc_start_after_create: true
+
+# Default resource allocation. Override per host in host_vars to match
+# the container's workload requirements.
+lxc_memory: 512
+lxc_cores: 1
+lxc_rootfs: "local-lvm:8"
+
+# ---------------------------------------------------------------------------
+# Required — set per host in host_vars
+# ---------------------------------------------------------------------------
+# pve_lxc_id must be defined in host_vars/<hostname>.yml for each container.
+# Example:
+#   host_vars/lxc-api-01.yml:
+#     pve_lxc_id: 201
+
+# ---------------------------------------------------------------------------
+# Verification
+# ---------------------------------------------------------------------------
+# Extend the base verification_roles from group_vars/all.yml with
+# service-specific checks once services are defined in infra-live.
+# Example:
+#   verification_roles:
+#     - verify_ssh
+#     - verify_network
+#     - verify_service

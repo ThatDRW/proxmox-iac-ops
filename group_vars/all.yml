@@ -1,0 +1,48 @@
+---
+# ---------------------------------------------------------------------------
+# Environment
+# ---------------------------------------------------------------------------
+# Override in infra-live group_vars or inventory to set the active environment.
+# Valid values: dev | staging | prod
+env: dev
+
+# Required — prevents accidental execution without an explicit environment.
+require_environment: true
+
+# Production changes are blocked unless this is explicitly set to true.
+# Override per-environment in infra-live:
+#   group_vars/prod.yml → allow_prod_changes: true
+allow_prod_changes: false
+
+# ---------------------------------------------------------------------------
+# Safety — defaults are conservative; relax per environment as needed
+# ---------------------------------------------------------------------------
+
+# Snapshots: enabled in all environments. Consider disabling only in dev
+# if snapshot storage is scarce.
+snapshot_enabled: true
+
+# Automatic rollback on failure. Recommended true in staging and prod.
+# May be set to false in dev for faster iteration.
+auto_rollback: true
+
+# ---------------------------------------------------------------------------
+# Verification
+# ---------------------------------------------------------------------------
+
+# Run verification framework after deployment.
+verification_enabled: true
+
+# Base verification roles applied to all hosts.
+# Extend in group_vars/pve_all.yml or host_vars for service-specific checks.
+verification_roles:
+  - verify_ssh
+  - verify_network
+
+# ---------------------------------------------------------------------------
+# OS configuration
+# ---------------------------------------------------------------------------
+
+# Stage 1 hardening applied during deployment. Disable only for initial
+# bootstrapping scenarios where sshd_config changes would break connectivity.
+os_hardening_enabled: true
