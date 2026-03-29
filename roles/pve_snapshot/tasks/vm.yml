@@ -20,3 +20,9 @@
 - name: Record snapshot name for rollback reference
   ansible.builtin.set_fact:
     pve_snapshot_last_name: "{{ pve_snapshot_name }}"
+
+- name: Enforce snapshot retention policy
+  ansible.builtin.include_tasks: retention.yml
+  vars:
+    _pve_snapshot_api_type: qemu
+    _pve_snapshot_vmid: "{{ pve_vm_id }}"

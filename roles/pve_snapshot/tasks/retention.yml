@@ -1,0 +1,60 @@
+---
+- name: Skip retention enforcement if disabled
+  ansible.builtin.debug:
+    msg: "Snapshot retention disabled — skipping for {{ inventory_hostname }}"
+  when: not pve_snapshot_retention_enabled
+
+- name: List snapshots via Proxmox API
+  ansible.builtin.uri:
+    url: "https://{{ pve_api_host }}:8006/api2/json/nodes/{{ pve_node }}/{{ _pve_snapshot_api_type }}/{{ _pve_snapshot_vmid }}/snapshot"
+    method: GET
+    headers:
+      Authorization: "PVEAPIToken={{ pve_api_user }}!{{ pve_api_token_id }}={{ pve_api_token_secret }}"
+    validate_certs: true
+    status_code: 200
+  delegate_to: localhost
+  register: pve_snapshot_list_result
+  when: pve_snapshot_retention_enabled
+
+- name: Identify managed snapshots eligible for pruning
+  ansible.builtin.set_fact:
+    _pve_snapshot_managed: >-
+      {{
+        pve_snapshot_list_result.json.data
+        | selectattr('name', 'match', '^pre_')
+        | sort(attribute='snaptime')
+        | list
+      }}
+  when: pve_snapshot_retention_enabled
+
+- name: Identify snapshots to delete beyond retention count
+  ansible.builtin.set_fact:
+    _pve_snapshot_prune: >-
+      {{
+        _pve_snapshot_managed[: [_pve_snapshot_managed | length - pve_snapshot_retention_keep, 0] | max]
+      }}
+  when: pve_snapshot_retention_enabled
+
+- name: Report retention plan
+  ansible.builtin.debug:
+    msg:
+      - "Managed snapshots found: {{ _pve_snapshot_managed | length }}"
+      - "Retention keep: {{ pve_snapshot_retention_keep }}"
+      - "Snapshots to prune: {{ _pve_snapshot_prune | map(attribute='name') | list }}"
+  when: pve_snapshot_retention_enabled
+
+- name: Delete snapshots beyond retention limit
+  ansible.builtin.uri:
+    url: "https://{{ pve_api_host }}:8006/api2/json/nodes/{{ pve_node }}/{{ _pve_snapshot_api_type }}/{{ _pve_snapshot_vmid }}/snapshot/{{ item.name }}"
+    method: DELETE
+    headers:
+      Authorization: "PVEAPIToken={{ pve_api_user }}!{{ pve_api_token_id }}={{ pve_api_token_secret }}"
+    validate_certs: true
+    status_code: 200
+  delegate_to: localhost
+  loop: "{{ _pve_snapshot_prune }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - pve_snapshot_retention_enabled
+    - _pve_snapshot_prune | length > 0

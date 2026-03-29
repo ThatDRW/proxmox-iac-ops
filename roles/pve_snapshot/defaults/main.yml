@@ -22,3 +22,9 @@ pve_snapshot_description: >-
   operation={{ pve_snapshot_metadata.operation }}
   timestamp={{ pve_snapshot_metadata.timestamp }}
   triggered_by={{ pve_snapshot_metadata.triggered_by }}
+
+# Retention policy
+# Only snapshots created by this role (prefixed with 'pre_') are considered.
+# Manually created snapshots are never touched.
+pve_snapshot_retention_enabled: true
+pve_snapshot_retention_keep: 3

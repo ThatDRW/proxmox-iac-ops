@@ -1,5 +1,6 @@
 # pve_snapshot
-Creates pre-change snapshots for Proxmox virtual machines and LXC containers.
+Creates pre-change snapshots for Proxmox virtual machines and LXC containers,
+and enforces a configurable retention policy after each snapshot is taken.
 
 Snapshots are taken before risky operations and serve as the restore point
 for the `pve_rollback` role. The snapshot name is stored as a host fact
@@ -34,14 +35,26 @@ needing to cross-reference Ansible logs.
 
 
 
+## Retention policy
+After each snapshot is created, the retention policy is evaluated automatically.
+
+Only snapshots whose names begin with `pre_` are considered — snapshots created
+manually via the Proxmox UI or API are never touched. Managed snapshots are
+sorted by creation time and the oldest beyond `pve_snapshot_retention_keep`
+are deleted via the Proxmox API.
+
+
+
 ## Variables
-| Variable                    | Default                                      | Description                                        |
-|-----------------------------|----------------------------------------------|----------------------------------------------------|
-| `pve_snapshot_enabled`      | `true`                                       | Toggle snapshot creation                           |
-| `pve_snapshot_operation`    | `operation`                                  | Logical operation label (e.g. `deploy`, `update`)  |
-| `pve_snapshot_name`         | `pre_<env>_<host>_<operation>_<epoch>`       | Generated snapshot identifier                      |
-| `pve_snapshot_metadata`     | see defaults                                 | Dict of values written to snapshot description     |
-| `pve_snapshot_description`  | rendered from `pve_snapshot_metadata`        | String written to Proxmox snapshot description     |
+| Variable                          | Default                                 | Description                                        |
+|-----------------------------------|-----------------------------------------|----------------------------------------------------|
+| `pve_snapshot_enabled`            | `true`                                  | Toggle snapshot creation                           |
+| `pve_snapshot_operation`          | `operation`                             | Logical operation label (e.g. `deploy`, `update`)  |
+| `pve_snapshot_name`               | `pre_<env>_<host>_<operation>_<epoch>`  | Generated snapshot identifier                      |
+| `pve_snapshot_metadata`           | see defaults                            | Dict of values written to snapshot description     |
+| `pve_snapshot_description`        | rendered from `pve_snapshot_metadata`   | String written to Proxmox snapshot description     |
+| `pve_snapshot_retention_enabled`  | `true`                                  | Toggle retention enforcement                       |
+| `pve_snapshot_retention_keep`     | `3`                                     | Number of managed snapshots to retain per host     |
 
 
 
