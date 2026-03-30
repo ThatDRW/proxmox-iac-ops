@@ -5,6 +5,17 @@
   when: not pve_rollback_auto
   tags: rollback
 
+- name: Assert snapshot name is defined
+  ansible.builtin.assert:
+    that:
+      - pve_rollback_snapshot is defined
+      - pve_rollback_snapshot | length > 0
+    fail_msg: >
+      Cannot perform rollback: pve_rollback_snapshot is not defined.
+      Ensure pve_snapshot ran successfully before rollback is attempted.
+  when: pve_rollback_auto
+  tags: rollback
+
 - name: Rollback virtual machines
   ansible.builtin.include_tasks: vm.yml
   when:

@@ -1,3 +1,13 @@
 ---
 pve_rollback_auto: true
 pve_rollback_snapshot: "{{ pve_snapshot_last_name | default(omit) }}"
+
+# Stop the VM/LXC prior to rollback. Required by Proxmox — rolling back a
+# running guest will fail. Set to false only if the guest is already stopped.
+pve_rollback_stop_before: true
+
+# Automatically start the guest after a successful rollback.
+pve_rollback_start_after: true
+
+# Seconds to wait for the guest to reach stopped state before rolling back.
+pve_rollback_stop_timeout: 60

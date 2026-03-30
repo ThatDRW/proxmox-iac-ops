@@ -1,4 +1,17 @@
 ---
+- name: Stop LXC before rollback
+  community.general.proxmox:
+    api_host: "{{ pve_api_host }}"
+    api_user: "{{ pve_api_user }}"
+    api_token_id: "{{ pve_api_token_id }}"
+    api_token_secret: "{{ pve_api_token_secret }}"
+    node: "{{ pve_node }}"
+    vmid: "{{ pve_lxc_id }}"
+    state: stopped
+    timeout: "{{ pve_rollback_stop_timeout }}"
+  delegate_to: localhost
+  when: pve_rollback_stop_before
+
 - name: Rollback LXC from snapshot
   community.general.proxmox:
     api_host: "{{ pve_api_host }}"
@@ -10,3 +23,24 @@
     state: rollback
     snapname: "{{ pve_rollback_snapshot }}"
   delegate_to: localhost
+  register: pve_rollback_lxc_result
+
+- name: Report LXC rollback outcome
+  ansible.builtin.debug:
+    msg:
+      - "LXC rollback completed"
+      - "Host: {{ inventory_hostname }}"
+      - "VMID: {{ pve_lxc_id }}"
+      - "Snapshot: {{ pve_rollback_snapshot }}"
+
+- name: Start LXC after rollback
+  community.general.proxmox:
+    api_host: "{{ pve_api_host }}"
+    api_user: "{{ pve_api_user }}"
+    api_token_id: "{{ pve_api_token_id }}"
+    api_token_secret: "{{ pve_api_token_secret }}"
+    node: "{{ pve_node }}"
+    vmid: "{{ pve_lxc_id }}"
+    state: started
+  delegate_to: localhost
+  when: pve_rollback_start_after
