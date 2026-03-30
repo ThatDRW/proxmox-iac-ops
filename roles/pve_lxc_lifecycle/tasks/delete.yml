@@ -1,4 +1,33 @@
 ---
+- name: Block LXC destruction in production without explicit override
+  ansible.builtin.assert:
+    that:
+      - pve_lxc_lifecycle_destroy_allow_prod | bool
+    fail_msg: >
+      LXC destruction blocked in production environment.
+      Set pve_lxc_lifecycle_destroy_allow_prod=true to proceed.
+  when: env == "prod"
+
+- name: Create pre-destroy snapshot
+  ansible.builtin.include_role:
+    name: pve_snapshot
+  vars:
+    pve_snapshot_operation: pre_destroy
+  when: pve_lxc_lifecycle_destroy_snapshot_before
+
+- name: Stop LXC before deletion
+  community.general.proxmox:
+    api_host: "{{ pve_api_host }}"
+    api_user: "{{ pve_api_user }}"
+    api_token_id: "{{ pve_api_token_id }}"
+    api_token_secret: "{{ pve_api_token_secret }}"
+    node: "{{ pve_node }}"
+    vmid: "{{ pve_lxc_id }}"
+    state: stopped
+    timeout: "{{ pve_lxc_lifecycle_destroy_stop_timeout }}"
+  delegate_to: localhost
+  when: pve_lxc_lifecycle_destroy_stop_before
+
 - name: Delete LXC container
   community.general.proxmox:
     api_host: "{{ pve_api_host }}"
@@ -9,3 +38,10 @@
     vmid: "{{ pve_lxc_id }}"
     state: absent
   delegate_to: localhost
+
+- name: Report LXC destruction
+  ansible.builtin.debug:
+    msg:
+      - "LXC container destroyed"
+      - "Host: {{ inventory_hostname }}"
+      - "VMID: {{ pve_lxc_id }}"

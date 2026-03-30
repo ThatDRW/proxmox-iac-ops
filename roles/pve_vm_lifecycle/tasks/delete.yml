@@ -1,4 +1,33 @@
 ---
+- name: Block VM destruction in production without explicit override
+  ansible.builtin.assert:
+    that:
+      - pve_vm_lifecycle_destroy_allow_prod | bool
+    fail_msg: >
+      VM destruction blocked in production environment.
+      Set pve_vm_lifecycle_destroy_allow_prod=true to proceed.
+  when: env == "prod"
+
+- name: Create pre-destroy snapshot
+  ansible.builtin.include_role:
+    name: pve_snapshot
+  vars:
+    pve_snapshot_operation: pre_destroy
+  when: pve_vm_lifecycle_destroy_snapshot_before
+
+- name: Stop VM before deletion
+  community.general.proxmox_kvm:
+    api_host: "{{ pve_api_host }}"
+    api_user: "{{ pve_api_user }}"
+    api_token_id: "{{ pve_api_token_id }}"
+    api_token_secret: "{{ pve_api_token_secret }}"
+    node: "{{ pve_node }}"
+    vmid: "{{ pve_vm_id }}"
+    state: stopped
+    timeout: "{{ pve_vm_lifecycle_destroy_stop_timeout }}"
+  delegate_to: localhost
+  when: pve_vm_lifecycle_destroy_stop_before
+
 - name: Delete VM
   community.general.proxmox_kvm:
     api_host: "{{ pve_api_host }}"
@@ -8,4 +37,13 @@
     node: "{{ pve_node }}"
     vmid: "{{ pve_vm_id }}"
     state: absent
+    purge: "{{ pve_vm_lifecycle_destroy_purge_disks }}"
   delegate_to: localhost
+
+- name: Report VM destruction
+  ansible.builtin.debug:
+    msg:
+      - "VM destroyed"
+      - "Host: {{ inventory_hostname }}"
+      - "VMID: {{ pve_vm_id }}"
+      - "Disks purged: {{ pve_vm_lifecycle_destroy_purge_disks }}"

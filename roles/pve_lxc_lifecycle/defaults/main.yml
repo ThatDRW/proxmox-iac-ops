@@ -7,3 +7,9 @@ pve_lxc_lifecycle_memory: 512
 pve_lxc_lifecycle_cores: 1
 pve_lxc_lifecycle_rootfs: "local-lvm:8"
 pve_lxc_lifecycle_template: ""
+
+# Destroy options — only apply when pve_lxc_lifecycle_action == "delete"
+pve_lxc_lifecycle_destroy_stop_before: true
+pve_lxc_lifecycle_destroy_stop_timeout: 60
+pve_lxc_lifecycle_destroy_allow_prod: false
+pve_lxc_lifecycle_destroy_snapshot_before: true

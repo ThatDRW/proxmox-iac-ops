@@ -8,3 +8,10 @@ pve_vm_lifecycle_timeout: "{{ pve_operation_timeout | default(300) }}"
 pve_vm_lifecycle_memory: 2048
 pve_vm_lifecycle_cores: 2
 pve_vm_lifecycle_bridge: vmbr0
+
+# Destroy options — only apply when pve_vm_lifecycle_action == "delete"
+pve_vm_lifecycle_destroy_stop_before: true
+pve_vm_lifecycle_destroy_stop_timeout: 60
+pve_vm_lifecycle_destroy_allow_prod: false
+pve_vm_lifecycle_destroy_snapshot_before: true
+pve_vm_lifecycle_destroy_purge_disks: false
