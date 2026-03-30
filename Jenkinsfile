@@ -71,7 +71,6 @@ pipeline {
             sshagent(['ansible-deploy-key']) {
                 sh 'ssh -o StrictHostKeyChecking=no ${ANSIBLE_LXC} "rm -rf ${REMOTE_DIR}"'
             }
-            cleanWs()
         }
     }
 }
