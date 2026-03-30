@@ -1,7 +1,8 @@
 pipeline {
-    agent any
+    agent { label 'agent-01' }
 
     options {
+        gitLabConnection('homelab-gitlab')
         disableConcurrentBuilds()
     }
 
